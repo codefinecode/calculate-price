@@ -2,12 +2,16 @@
 
 namespace App\Service\Payment;
 
+use App\Service\Payment\PaymentProcessorInterface;
+
 class PaymentProcessorFactory
 {
     private array $processors = [];
 
-    public function __construct(PaymentProcessorInterface $paypal, PaymentProcessorInterface $stripe)
-    {
+    public function __construct(
+        PaymentProcessorInterface $paypal,
+        PaymentProcessorInterface $stripe
+    ) {
         $this->processors['paypal'] = $paypal;
         $this->processors['stripe'] = $stripe;
     }

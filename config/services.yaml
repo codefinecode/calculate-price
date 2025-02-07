@@ -22,12 +22,28 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Service\PaymentService:
-        arguments:
-            $factory: '@App\Service\Payment\PaymentProcessorFactory'
-            $productRepository: '@App\Repository\ProductRepository'
-            $couponRepository: '@App\Repository\CouponRepository'
 
+
+    # Payment processors from the systemeio/test-for-candidates package
+    Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor: ~
+    Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor: ~
+
+    # Adapters for payment processors
+    App\Service\Payment\PaypalPaymentProcessorAdapter:
+        arguments:
+            $processor: '@Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor'
+
+    App\Service\Payment\StripePaymentProcessorAdapter:
+        arguments:
+            $processor: '@Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor'
+
+    # Payment processor factory
+    App\Service\Payment\PaymentProcessorFactory:
+        arguments:
+            $paypal: '@App\Service\Payment\PaypalPaymentProcessorAdapter'
+            $stripe: '@App\Service\Payment\StripePaymentProcessorAdapter'
+
+    # Discount strategies
     app.fixed_discount_strategy:
         class: App\Service\Coupon\FixedDiscountStrategy
         public: true
@@ -36,7 +52,21 @@ services:
         class: App\Service\Coupon\PercentageDiscountStrategy
         public: true
 
+    # Price calculator service
     App\Service\PriceCalculatorService:
         arguments:
             $fixedStrategy: '@app.fixed_discount_strategy'
             $percentageStrategy: '@app.percentage_discount_strategy'
+
+    # Payment service
+    App\Service\PaymentService:
+        arguments:
+            $factory: '@App\Service\Payment\PaymentProcessorFactory'
+
+    # Price calculator factory (optional)
+    App\Service\PriceCalculatorFactory:
+        arguments:
+            $fixedStrategy: '@app.fixed_discount_strategy'
+            $percentageStrategy: '@app.percentage_discount_strategy'
+            $productRepository: '@App\Repository\ProductRepository'
+            $couponRepository: '@App\Repository\CouponRepository'
