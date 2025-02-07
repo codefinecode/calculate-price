@@ -18,7 +18,8 @@
         "symfony/runtime": "7.2.*",
         "symfony/serializer": "7.2.*",
         "symfony/validator": "7.2.*",
-        "symfony/yaml": "7.2.*"
+        "symfony/yaml": "7.2.*",
+        "systemeio/test-for-candidates": "^1.0"
     },
     "config": {
         "allow-plugins": {
@@ -72,6 +73,7 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.0",
         "phpunit/phpunit": "^11.5",
         "symfony/maker-bundle": "^1.62",
         "symfony/web-profiler-bundle": "7.2.*"

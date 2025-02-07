@@ -22,3 +22,21 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\PaymentService:
+        arguments:
+            $factory: '@App\Service\Payment\PaymentProcessorFactory'
+            $productRepository: '@App\Repository\ProductRepository'
+            $couponRepository: '@App\Repository\CouponRepository'
+
+    app.fixed_discount_strategy:
+        class: App\Service\Coupon\FixedDiscountStrategy
+        public: true
+
+    app.percentage_discount_strategy:
+        class: App\Service\Coupon\PercentageDiscountStrategy
+        public: true
+
+    App\Service\PriceCalculatorService:
+        arguments:
+            $fixedStrategy: '@app.fixed_discount_strategy'
+            $percentageStrategy: '@app.percentage_discount_strategy'
