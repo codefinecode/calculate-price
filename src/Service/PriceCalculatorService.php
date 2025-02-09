@@ -29,6 +29,7 @@ class PriceCalculatorService
 
     public function calculate(int $productId, string $taxNumber, ?string $couponCode): array
     {
+        // Получаем продукт из репозитория
         $product = $this->productRepository->find($productId);
         if (!$product) {
             throw new InvalidArgumentException('Product not found');
@@ -45,6 +46,7 @@ class PriceCalculatorService
                 throw new InvalidArgumentException('Invalid coupon code');
             }
 
+            // Выбираем стратегию скидки в зависимости от типа купона
             $strategy = match ($coupon->getType()) {
                 CouponType::FIXED => $this->fixedStrategy,
                 CouponType::PERCENTAGE => $this->percentageStrategy,
@@ -53,7 +55,7 @@ class PriceCalculatorService
             $price = $strategy->apply($price, $coupon->getValue());
         }
 
-        // Расчет налога
+        // Расчет налога на основе страны налогового номера
         $countryCode = substr($taxNumber, 0, 2);
         $taxRate = $this->taxRates[$countryCode] ?? 0;
         $tax = $price * $taxRate;

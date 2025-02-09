@@ -25,7 +25,6 @@ final class Version20250207045238 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql(sql: 'CREATE SCHEMA public');
         $this->addSql(sql: 'DROP TABLE coupons');
         $this->addSql(sql: 'DROP TABLE products');
     }

@@ -3,25 +3,24 @@
 namespace App\Service;
 
 use App\Service\Payment\PaymentProcessorFactory;
+use App\Service\PriceCalculatorService;
 
 class PaymentService
 {
     private PaymentProcessorFactory $factory;
-    private PriceCalculatorFactory $calculatorFactory;
+    private PriceCalculatorService $calculator;
 
     public function __construct(
         PaymentProcessorFactory $factory,
-        PriceCalculatorFactory $calculatorFactory
+        PriceCalculatorService $calculator
     ) {
         $this->factory = $factory;
-        $this->calculatorFactory = $calculatorFactory;
+        $this->calculator = $calculator;
     }
 
     public function processPayment(int $productId, string $taxNumber, ?string $couponCode, string $processorName): array
     {
-        $calculator = $this->calculatorFactory->create();
-        $priceDetails = $calculator->calculate($productId, $taxNumber, $couponCode);
-
+        $priceDetails = $this->calculator->calculate($productId, $taxNumber, $couponCode);
         $processor = $this->factory->getProcessor($processorName);
         return $processor->process($priceDetails['final_price']);
     }

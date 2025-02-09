@@ -24,6 +24,15 @@ class Coupon
     #[ORM\Column(type: 'float')]
     private ?float $value = null;
 
+
+    public function __construct(string $code, CouponType $type, float $value)
+    {
+        $this->code = $code;
+        $this->type = $type;
+        $this->value = $value;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

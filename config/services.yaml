@@ -19,10 +19,13 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+            - '../src/Dto/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\Dto\CalculatePriceInput: ~
+    App\Dto\PurchaseInput: ~
 
     # Payment processors from the systemeio/test-for-candidates package
     Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor: ~
@@ -62,11 +65,9 @@ services:
     App\Service\PaymentService:
         arguments:
             $factory: '@App\Service\Payment\PaymentProcessorFactory'
+            $calculator: '@App\Service\PriceCalculatorService'
 
-    # Price calculator factory (optional)
-    App\Service\PriceCalculatorFactory:
-        arguments:
-            $fixedStrategy: '@app.fixed_discount_strategy'
-            $percentageStrategy: '@app.percentage_discount_strategy'
-            $productRepository: '@App\Repository\ProductRepository'
-            $couponRepository: '@App\Repository\CouponRepository'
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

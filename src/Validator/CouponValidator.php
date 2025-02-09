@@ -14,13 +14,14 @@ class CouponValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (null === $value || '' === $value) {
+        if (!is_string($value) || '' === $value) {
             return;
         }
 
-        if (!$this->couponRepository->findOneBy(['code' => $value])) {
+        if (!$this->couponRepository->findOneByCode($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
+                ->setCode(Coupon::NO_SUCH_COUPON_ERROR)
                 ->addViolation();
         }
     }

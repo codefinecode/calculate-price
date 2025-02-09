@@ -13,6 +13,7 @@ class TaxNumberValidator extends ConstraintValidator
             return;
         }
 
+        // Паттерны для проверки формата налоговых номеров разных стран
         $patterns = [
             'DE' => '/^DE\d{9}$/',
             'IT' => '/^IT\d{11}$/',
@@ -24,6 +25,7 @@ class TaxNumberValidator extends ConstraintValidator
         $pattern = $patterns[$countryCode] ?? null;
 
         if (!$pattern || !preg_match($pattern, $value)) {
+            // Налоговый номер не соответствует формату для указанной страны
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

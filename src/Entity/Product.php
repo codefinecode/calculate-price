@@ -20,6 +20,12 @@ class Product
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $price = null;
 
+    public function __construct(string $name, float $price)
+    {
+        $this->name = $name;
+        $this->price = $price;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

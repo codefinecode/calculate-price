@@ -17,8 +17,8 @@ class PurchaseInput
     #[CustomAssert\Coupon]
     private ?string $couponCode;
 
+    #[CustomAssert\PaymentProcessor]
     #[Assert\NotBlank]
-    #[Assert\Choice(choices: ['paypal', 'stripe'])]
     private string $paymentProcessor;
 
     public function __construct(int $product, string $taxNumber, ?string $couponCode, string $paymentProcessor)

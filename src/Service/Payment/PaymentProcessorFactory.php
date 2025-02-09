@@ -2,8 +2,6 @@
 
 namespace App\Service\Payment;
 
-use App\Service\Payment\PaymentProcessorInterface;
-
 class PaymentProcessorFactory
 {
     private array $processors = [];
@@ -11,7 +9,9 @@ class PaymentProcessorFactory
     public function __construct(
         PaymentProcessorInterface $paypal,
         PaymentProcessorInterface $stripe
-    ) {
+    )
+    {
+        // Используем DI для инжекции платежных процессоров, что позволит легко добавить новыме процессоры.
         $this->processors['paypal'] = $paypal;
         $this->processors['stripe'] = $stripe;
     }

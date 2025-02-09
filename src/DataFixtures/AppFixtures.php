@@ -20,9 +20,10 @@ class AppFixtures extends Fixture
         ];
 
         foreach ($products as $productData) {
-            $product = new Product();
-            $product->setName($productData['name']);
-            $product->setPrice($productData['price']);
+            $product = new Product(
+                name: $productData['name'],
+                price: $productData['price']
+            );
             $manager->persist($product);
         }
 
@@ -33,10 +34,11 @@ class AppFixtures extends Fixture
         ];
 
         foreach ($coupons as $couponData) {
-            $coupon = new Coupon();
-            $coupon->setCode($couponData['code']);
-            $coupon->setType($couponData['type']);
-            $coupon->setValue($couponData['value']);
+            $coupon = new Coupon(
+                code: $couponData['code'],
+                type: $couponData['type'],
+                value: $couponData['value']
+            );
             $manager->persist($coupon);
         }
 
