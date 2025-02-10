@@ -31,8 +31,10 @@ class AppTestFixtures extends AppFixtures implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
-        parent::load($manager);
-        $this->addTestData($manager);
-        $manager->flush();
+        if ($_ENV['APP_ENV'] === 'test') {
+            parent::load($manager);
+            $this->addTestData($manager);
+            $manager->flush();
+        }
     }
 }
